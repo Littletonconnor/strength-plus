@@ -1,8 +1,7 @@
 const user = {
-  firstName: 'user',
-  lastName: 'fixed',
-  email: 'fixedUser@email.com',
-  password: 'fixedUser',
+  name: 'Connor Littleton',
+  email: 'littletonconnor@gmail.com',
+  password: '9Hi1357!',
 };
 
 const fixtures = { user };

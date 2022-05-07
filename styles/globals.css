@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-gray-50;
-  }
   .container {
     @apply px-4 md:px-8 lg:px-12 xl:px-0;
   }

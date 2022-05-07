@@ -9,7 +9,7 @@ async function seed(user) {
     const hashPassword = await bcrypt.hash(user.password, salt);
     await prisma.user.create({
       data: {
-        name: user.firstName,
+        name: user.name,
         email: user.email,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
