@@ -25,6 +25,36 @@
   }
 }
 
+  /* From https://github.com/reach/reach-ui/blob/develop/packages/dialog/styles.css */
+  /* Used to detect in JavaScript if apps have loaded styles or not. */
+  [data-reach-dialog-overlay] {
+    background: hsla(0, 0%, 0%, 0.8);
+    position: fixed;
+    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  [data-reach-dialog-content] iframe {
+    height: calc(80vh * (9 / 16));
+    width: 80vw;
+    max-width: 100%;
+    margin: 0 auto;
+    outline: none;
+  }
+
+
+:root {
+--reach-dialog: 1
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */

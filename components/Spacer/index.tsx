@@ -1,3 +1,1 @@
-import Mail from './Spacer';
-
-export { Mail };
+export { default } from './Spacer';
