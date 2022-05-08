@@ -8,6 +8,23 @@
   }
 }
 
+@Layer components {
+  @keyframes slide-out {
+    from {
+      opacity: 0;
+      transform: translateY(-50%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+
+  .slide-out-animation {
+    animation: slide-out 0.2s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  }
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */

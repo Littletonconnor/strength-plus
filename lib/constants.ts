@@ -3,3 +3,5 @@ export const CODES = {
   password: 'invalid_password',
   login: 'invalid_login',
 };
+
+export type CODES_KEYS = keyof typeof CODES;

@@ -11,17 +11,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     providers: [
       Credentials({
         name: 'Credentials',
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
         async authorize(credentials: any) {
-          console.log({ credentials });
-
-          const response = await http.post('/auth/signin/credentials', {
+          const response = await http.post('http://localhost:3000/api/auth/signin/credentials', {
             email: credentials.email,
-            password: credentials.password,
+            password: credentials?.password,
           });
 
-          console.log(response);
+          if (response.error) {
+            return null;
+          }
+
+          return {
+            user: response.user,
+            token: response.token,
+          };
+        },
+        credentials: {
+          username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
+          password: { label: 'Password', type: 'password' },
         },
       }),
       GoogleProvider({
@@ -31,6 +38,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     ],
     debug: process.env.NODE_ENV === 'development',
     secret: process.env.AUTH_SECRET,
+    session: {
+      strategy: 'jwt',
+    },
     jwt: {
       secret: process.env.JWT_SECRET,
     },
@@ -41,12 +51,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     },
     callbacks: {
       async signIn(params) {
-        console.log({ params });
         return true;
       },
-      async session(params) {
-        console.log({ params });
-        return params.session;
+      async session({ session, token }: any) {
+        if (token.user) {
+          session.user = {
+            name: token.user.name,
+            email: token.user.email,
+          };
+          session.accessToken = token.accessToken;
+        }
+        return session;
+      },
+      async jwt({ token, user }) {
+        if (user) {
+          token.user = { name: user.name, email: user.email };
+          token.accessToken = user.token;
+        }
+        return token;
       },
     },
   });
