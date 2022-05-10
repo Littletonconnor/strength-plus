@@ -96,6 +96,7 @@ body {
   font-size: 1rem;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background: white;
 }
 /* 5. Make images easier to work with */
 img,

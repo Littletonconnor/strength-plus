@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import WorkoutModal from 'components/Modal';
 import Modal from 'components/Modal';
 import Spacer from 'components/Spacer';
 import { History, Start, User } from 'components/Svg';
@@ -13,8 +14,6 @@ export async function getStaticProps() {
 }
 
 export default function Home() {
-  const [visible, setVisible] = useState(false);
-
   const router = useRouter();
   const { status } = useSession();
 
@@ -75,19 +74,13 @@ export default function Home() {
       </header>
       <main className="mx-auto max-w-3xl p-3">
         <h2 className="sr-only">Quick Start</h2>
-        <button
-          className="px4 flex w-full justify-center rounded-md bg-primary py-2 text-lg font-semibold text-white"
-          onClick={() => setVisible(true)}
-        >
-          Start workout
-        </button>
+        <WorkoutModal />
         <Spacer size={32} />
         <div>
           <h2 className="text-2xl font-semibold">Templates</h2>
           <p>TODO</p>
         </div>
       </main>
-      <AnimatePresence>{visible && <Modal onClose={() => setVisible(false)}>Some children</Modal>}</AnimatePresence>
     </div>
   );
 }

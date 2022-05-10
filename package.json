@@ -13,10 +13,11 @@
     "prisma-cli": "node prisma/prisma_cli.mjs"
   },
   "dependencies": {
+    "@headlessui/react": "^1.6.1",
+    "@heroicons/react": "^1.0.6",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@next/bundle-analyzer": "^12.1.5",
     "@prisma/client": "^3.13.0",
-    "@reach/dialog": "^0.17.0",
     "bcrypt": "^5.0.1",
     "chalk": "^5.0.1",
     "framer-motion": "^6.3.1",
