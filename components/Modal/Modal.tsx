@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
+import { reset, set } from './utils';
 
 const TRANSITIONS = {
   DURATION: 0.5,
@@ -31,35 +32,8 @@ function Modal({ onClose, children }: { onClose: () => void; children: React.Rea
         animate="open"
         exit="closed"
         className="fixed inset-0 bg-black/40"
-        onAnimationStart={(variant: string) => {
-          if (variant === 'open') {
-            set(document.documentElement, {
-              background: 'black',
-              height: '100vh',
-            });
-            set(document.body, { position: 'fixed', inset: '0' });
-            set(document.querySelector('header'), { position: 'absolute' });
-            set(document.querySelector('#__next'), {
-              borderRadius: '8px',
-              overflow: 'hidden',
-              transform: 'scale(0.93) translateY(calc(env(safe-area-inset-top) + 8px))',
-              transformOrigin: 'top',
-              transitionProperty: 'transform',
-              transitionDuration: `${TRANSITIONS.DURATION}`,
-              transitionTimingFunction: `cubix-bezier${TRANSITIONS.EASE.join(',')}`,
-            });
-          } else {
-            reset(document.querySelector('#__next'), 'transform');
-          }
-        }}
-        onAnimationComplete={(variant: string) => {
-          if (variant === 'closed') {
-            reset(document.documentElement);
-            reset(document.body);
-            reset(document.querySelector('header'));
-            reset(document.querySelector('#__next'));
-          }
-        }}
+        onAnimationStart={animationStart}
+        onAnimationComplete={animationStop}
       />
       <motion.div
         initial={{ y: '100%' }}
@@ -79,28 +53,34 @@ function Modal({ onClose, children }: { onClose: () => void; children: React.Rea
   );
 }
 
-const cache = new Map();
-
-function set(el: any, styles: any) {
-  const originalStyles = {} as any;
-
-  Object.entries(styles).forEach(([key, value]) => {
-    originalStyles[key] = el.style[key];
-    el.style[key] = value;
-  });
-
-  cache.set(el, originalStyles);
+function animationStart(variant: string) {
+  if (variant === 'open') {
+    set(document.documentElement, {
+      background: 'black',
+      height: '100vh',
+    });
+    set(document.body, { position: 'fixed', inset: '0' });
+    set(document.querySelector('header'), { position: 'absolute' });
+    set(document.querySelector('#__next'), {
+      borderRadius: '8px',
+      overflow: 'hidden',
+      transform: 'scale(0.93) translateY(calc(env(safe-area-inset-top) + 8px))',
+      transformOrigin: 'top',
+      transitionProperty: 'transform',
+      transitionDuration: `${TRANSITIONS.DURATION}`,
+      transitionTimingFunction: `cubix-bezier${TRANSITIONS.EASE.join(',')}`,
+    });
+  } else {
+    reset(document.querySelector('#__next'), 'transform');
+  }
 }
 
-function reset(el: any, prop?: any) {
-  const originalStyles = cache.get(el);
-
-  if (prop) {
-    el.style[prop] = originalStyles[prop];
-  } else {
-    Object.entries(originalStyles).forEach(([key, value]) => {
-      el.style[key] = value;
-    });
+function animationStop(variant: string) {
+  if (variant === 'closed') {
+    reset(document.documentElement);
+    reset(document.body);
+    reset(document.querySelector('header'));
+    reset(document.querySelector('#__next'));
   }
 }
 

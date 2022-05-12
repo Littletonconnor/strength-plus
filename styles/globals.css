@@ -89,6 +89,10 @@ body {
   min-height: 100%;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
+
+html {
+  padding-left: calc(100vw - 100%);
+}
 /*
   4. Improve the typography across the site.
 */

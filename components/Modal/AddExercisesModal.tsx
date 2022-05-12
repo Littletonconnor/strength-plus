@@ -1,31 +1,36 @@
-import React, { useState } from 'react';
+import { Combobox, Dialog, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
-import { Dialog, Combobox, Transition } from '@headlessui/react';
-
-// todo(connor): Move to Db.
-export const Workouts = [
-  { id: 1, name: 'Bench press' },
-  { id: 2, name: 'Squat' },
-  { id: 3, name: 'Incline Bench Press' },
-  { id: 4, name: 'Bicep Curls' },
-  { id: 5, name: 'Hack Squat' },
-  { id: 6, name: 'Lat Pull Downs' },
-];
+import React, { useState } from 'react';
+import { Workouts } from './utils';
 
 export type Workout = { id: number; name: string };
 
 interface Props {
-  selectedExercises: Workout[];
-  setSelectedExercises: (selected: Workout) => void;
+  setSelectedExercises: (selected: Workout[]) => void;
 }
 
-function AddExercises({ selectedExercises, setSelectedExercises }: Props) {
+function AddExercises({ setSelectedExercises }: Props) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState<Workout | null>(null);
+  const [selected, setSelected] = useState<Workout[]>([]);
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+
+  const onChangeSelected = (items: Workout[]) => {
+    const newItems = items.filter(Boolean).flat();
+    setSelected(newItems);
+  };
+
+  const onHandleClose = () => {
+    setSelected([]);
+    closeModal();
+  };
+
+  const onHandleAdd = () => {
+    setSelectedExercises(selected);
+    onHandleClose();
+  };
 
   const filteredWorkouts =
     query === ''
@@ -34,23 +39,13 @@ function AddExercises({ selectedExercises, setSelectedExercises }: Props) {
           person.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
         );
 
-  const onChangeSelected = (item: Workout) => {
-    setSelected(item);
-    setSelectedExercises(item);
-  };
-
-  const onHandleClose = () => {
-    setSelected(null);
-    closeModal();
-  };
-
   return (
     <>
       <button onClick={openModal} className="rounded-lg bg-primary py-2 px-4 text-base font-semibold text-white">
         Add Workouts
       </button>
       <Transition appear show={open} as={React.Fragment}>
-        <Dialog as="div" className="relative isolate z-10" onClose={() => setOpen(false)}>
+        <Dialog as="div" className="relative isolate z-10" onClose={onHandleClose}>
           <Transition.Child
             as={React.Fragment}
             enter="ease-out duration-300"
@@ -78,7 +73,7 @@ function AddExercises({ selectedExercises, setSelectedExercises }: Props) {
                     Add Exercises
                   </Dialog.Title>
                   <div className="mt-2">
-                    <Combobox value={selected} onChange={onChangeSelected}>
+                    <Combobox value={selected} onChange={onChangeSelected} multiple>
                       <div className="relative mt-1">
                         <div className="relative w-full cursor-default rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                           <Combobox.Input
@@ -114,22 +109,24 @@ function AddExercises({ selectedExercises, setSelectedExercises }: Props) {
                                   }
                                   value={workout}
                                 >
-                                  {({ selected, active }) => (
-                                    <>
-                                      <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-                                        {workout.name}
-                                      </span>
-                                      {selected ? (
-                                        <span
-                                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                            active ? 'text-white' : 'text-primary'
-                                          }`}
-                                        >
-                                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                  {({ selected, active }) => {
+                                    return (
+                                      <>
+                                        <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                                          {workout.name}
                                         </span>
-                                      ) : null}
-                                    </>
-                                  )}
+                                        {selected ? (
+                                          <span
+                                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                              active ? 'text-white' : 'text-primary'
+                                            }`}
+                                          >
+                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                          </span>
+                                        ) : null}
+                                      </>
+                                    );
+                                  }}
                                 </Combobox.Option>
                               ))
                             )}
@@ -140,11 +137,12 @@ function AddExercises({ selectedExercises, setSelectedExercises }: Props) {
                   </div>
                   <div className="mt-4 flex flex-col space-y-4">
                     <button
+                      disabled={selected.length === 0}
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-palePrimary px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                      onClick={() => setOpen(false)}
+                      onClick={onHandleAdd}
                     >
-                      Add ({selectedExercises.length})
+                      Add ({selected.length})
                     </button>
                     <button
                       onClick={onHandleClose}

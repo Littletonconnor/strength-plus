@@ -1,0 +1,34 @@
+// todo(connor): Move to Db.
+export const Workouts = [
+  { id: 1, name: 'Bench press' },
+  { id: 2, name: 'Squat' },
+  { id: 3, name: 'Incline Bench Press' },
+  { id: 4, name: 'Bicep Curls' },
+  { id: 5, name: 'Hack Squat' },
+  { id: 6, name: 'Lat Pull Downs' },
+];
+
+const cache = new Map();
+
+export function set(el: any, styles: any) {
+  const originalStyles = {} as any;
+
+  Object.entries(styles).forEach(([key, value]) => {
+    originalStyles[key] = el.style[key];
+    el.style[key] = value;
+  });
+
+  cache.set(el, originalStyles);
+}
+
+export function reset(el: any, prop?: any) {
+  const originalStyles = cache.get(el);
+
+  if (prop) {
+    el.style[prop] = originalStyles[prop];
+  } else {
+    Object.entries(originalStyles).forEach(([key, value]) => {
+      el.style[key] = value;
+    });
+  }
+}
