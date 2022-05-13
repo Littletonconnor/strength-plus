@@ -1,11 +1,19 @@
 import { useEffect, useState } from 'react';
 
-function useTimer() {
+function useTimer(start: boolean) {
   const [counter, setCounter] = useState(0);
   const [second, setSecond] = useState('00');
   const [minute, setMinute] = useState('00');
 
   useEffect(() => {
+    setCounter(0);
+    setSecond('00');
+    setMinute('00');
+  }, [start]);
+
+  useEffect(() => {
+    if (!start) return;
+
     const intervalId = setInterval(() => {
       const secondCounter = counter % 60;
       const minuteCounter = Math.floor(counter / 60);
@@ -19,8 +27,10 @@ function useTimer() {
       setCounter((counter) => counter + 1);
     }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, [counter]);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [counter, start]);
 
   const time = `${minute}:${second}`;
 

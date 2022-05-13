@@ -7,6 +7,9 @@ module.exports = {
         palePrimary: '#7a73ff',
         offgray: '#f7fafc',
       },
+      screens: {
+        standalone: { raw: '(display-mode: standalone)' },
+      },
     },
   },
   plugins: [],

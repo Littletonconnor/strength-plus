@@ -42,7 +42,7 @@ function AddExercises({ setSelectedExercises }: Props) {
   return (
     <>
       <button onClick={openModal} className="rounded-lg bg-primary py-2 px-4 text-base font-semibold text-white">
-        Add Workouts
+        Add Exercises
       </button>
       <Transition appear show={open} as={React.Fragment}>
         <Dialog as="div" className="relative isolate z-10" onClose={onHandleClose}>
@@ -68,7 +68,7 @@ function AddExercises({ setSelectedExercises }: Props) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="h-96 w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="h-80 w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                     Add Exercises
                   </Dialog.Title>

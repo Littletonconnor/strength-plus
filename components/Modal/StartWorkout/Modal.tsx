@@ -1,19 +1,18 @@
-import { AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { CheckIcon, DotsHorizontalIcon } from '@heroicons/react/solid';
+import Modal from 'components/Modal';
+import AddExercise from 'components/Modal/AddExercise';
+import { SelectedWorkout, Workout } from 'components/Modal/utils';
 import Spacer from 'components/Spacer';
 import { Start } from 'components/Svg';
-import React from 'react';
-import Modal from './Modal';
-import { DotsHorizontalIcon, CheckIcon } from '@heroicons/react/solid';
-import AddExercises, { Workout } from './AddExercisesModal';
-import { SelectedWorkout } from './types';
+import { AnimatePresence } from 'framer-motion';
 import useTimer from 'lib/hooks/useTimer';
+import React, { useState } from 'react';
 
 function WorkoutModal() {
   const [open, setOpen] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState<SelectedWorkout[]>([]);
 
-  const time = useTimer();
+  const time = useTimer(open);
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
@@ -101,13 +100,13 @@ function WorkoutModal() {
                         >
                           Add set
                         </button>
-                        <Spacer size={32 * 2} />
+                        <Spacer size={32} />
                       </>
                     );
                   })
                 : null}
               <Spacer size={32} />
-              <AddExercises setSelectedExercises={onHandleSetExercises} />
+              <AddExercise setSelectedExercises={onHandleSetExercises} />
               <Spacer size={32 / 2} />
               <button
                 onClick={onHandleClose}

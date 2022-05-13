@@ -1,3 +1,14 @@
+export const Transitions = {
+  DURATION: 0.3,
+  EASE: [0.32, 0.72, 0, 1],
+};
+
+export type Workout = { id: number; name: string };
+
+export type SelectedWorkout = Workout & {
+  sets: number;
+};
+
 // todo(connor): Move to Db.
 export const Workouts = [
   { id: 1, name: 'Bench press' },
