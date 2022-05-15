@@ -77,8 +77,8 @@ model Exercise {
 
 model Set {
   id         String   @id @default(cuid())
-  amount     Float
-  weight     Float
+  lbs        Float    @default(0)
+  reps       Float    @default(0)
   exerciseId String
   workout    Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 }

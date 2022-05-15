@@ -7,12 +7,15 @@ import { Start } from 'components/Svg';
 import { AnimatePresence } from 'framer-motion';
 import useTimer from 'lib/hooks/useTimer';
 import React, { useState } from 'react';
+import http from 'lib/http';
+import qs from 'query-string';
 
 function WorkoutModal() {
   const [open, setOpen] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState<SelectedWorkout[]>([]);
 
-  const time = useTimer(open);
+  // todo(connor): Fix timer
+  // const time = useTimer(open);
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
@@ -22,10 +25,14 @@ function WorkoutModal() {
     closeModal();
   };
 
-  const onHandleSetExercises = (selected: Workout[]) => {
-    const newSelectedExercises = selected.map((s) => ({ ...s, sets: 1 }));
-    setSelectedExercises(newSelectedExercises);
+  const onHandleSetExercises = async (selected: Workout[]) => {
+    const qsWorkoutNames = qs.stringify({ workouts: selected.map((s) => s.name) }, { arrayFormat: 'bracket' });
+    const url = 'http://localhost:3000/api/add-workout?' + new URLSearchParams(qsWorkoutNames);
+    const response = await http.get(url);
+    setSelectedExercises(response.exercises);
   };
+
+  console.log({ selectedExercises });
 
   return (
     <>
@@ -44,15 +51,15 @@ function WorkoutModal() {
                   <button>
                     <Start className="h-full w-6 items-baseline text-gray-500" />
                   </button>
-                  <span className="text-xs font-semibold text-gray-500">{time}</span>
+                  <span className="text-xs font-semibold text-gray-500">{1}</span>
                 </div>
                 <button className="rounded-lg bg-primary py-2 px-4 text-sm font-semibold text-white">Finish</button>
               </div>
               <Spacer size={32} />
               {selectedExercises.length > 0
-                ? selectedExercises.map((selectedExercise) => {
+                ? selectedExercises.map((selectedExercise, idx) => {
                     return (
-                      <>
+                      <React.Fragment key={idx}>
                         <div key={selectedExercise.id} className="flex flex-col">
                           <div className="flex items-center">
                             <button className="text-lg font-bold text-gray-700">{selectedExercise.name}</button>
@@ -71,25 +78,26 @@ function WorkoutModal() {
                             </button>
                           </div>
                           <Spacer size={32 / 4} />
-                          {Array.from({ length: selectedExercise.sets }, (_, i) => {
-                            // todo(connor): Add dynamic id to set
+                          {selectedExercise.sets.map((set: any, i: number) => {
                             return (
-                              <>
+                              <React.Fragment key={i}>
                                 <div className="grid grid-cols-5 gap-6 text-center" key={i}>
                                   <span className="w-fit rounded-md bg-gray-200 py-1 px-2 text-sm font-bold">
                                     {i + 1}
                                   </span>
-                                  <span className="w-full rounded-md bg-gray-200 py-1 px-2 text-sm font-bold">
-                                    &mdash;
-                                  </span>
-                                  <input type="number" className="w-full rounded-md bg-gray-200 text-center" />
+                                  <span className="w-full py-1 px-2 text-sm font-bold">&mdash;</span>
+                                  <input
+                                    placeholder={set.weight || ''}
+                                    type="number"
+                                    className="w-full rounded-md bg-gray-200 text-center font-semibold"
+                                  />
                                   <input type="number" className="w-full rounded-md bg-gray-200 text-center" />
                                   <button className="w-fit rounded-md bg-gray-200 px-2 py-1">
                                     <CheckIcon className="h-5 w-5 text-primary" />
                                   </button>
                                 </div>
                                 <Spacer size={32 / 4} />
-                              </>
+                              </React.Fragment>
                             );
                           })}
                         </div>
@@ -101,7 +109,7 @@ function WorkoutModal() {
                           Add set
                         </button>
                         <Spacer size={32} />
-                      </>
+                      </React.Fragment>
                     );
                   })
                 : null}

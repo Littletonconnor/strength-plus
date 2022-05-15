@@ -12,25 +12,30 @@ export default async function history(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: true, message: 'No valid session.' });
   }
 
+  const workouts = Array.isArray(req.query['workouts[]']) ? req.query['workouts[]'] : [req.query['workouts[]']];
+
   try {
-    const data = await prisma.user.findUnique({
+    const data = await prisma.user.findMany({
       where: {
-        email: 'littletonconnor@gmail.com',
+        email: session.email as string,
       },
       include: {
-        workouts: {
+        exercises: {
+          where: {
+            OR: workouts.map((workout) => ({
+              name: {
+                contains: workout,
+              },
+            })),
+          },
           include: {
-            exercises: true,
+            sets: true,
           },
         },
       },
     });
 
-    if (!data?.workouts) {
-      return res.status(200).json({ error: false, workouts: [] });
-    }
-
-    return res.status(200).json({ error: false, workouts: data.workouts });
+    return res.status(200).json({ error: false, exercises: data.map((d) => d.exercises).flat() });
   } catch (error) {
     return res.status(500).json({ error: true, message: 'Server error retrieving workouts.' });
   }

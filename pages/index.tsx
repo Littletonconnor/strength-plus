@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import WorkoutModal from 'components/Modal/StartExercise';
+import WorkoutModal from 'components/Modal/StartWorkout';
 import Spacer from 'components/Spacer';
 import { History, Start, User } from 'components/Svg';
 import { useSession } from 'next-auth/react';
