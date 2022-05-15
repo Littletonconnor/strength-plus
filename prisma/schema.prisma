@@ -47,9 +47,10 @@ model User {
   emailVerified DateTime?
   image         String?
 
-  accounts Account[]
-  sessions Session[]
-  workouts Workout[]
+  accounts  Account[]
+  sessions  Session[]
+  workouts  Workout[]
+  exercises Exercise[]
 }
 
 model Workout {
@@ -62,13 +63,16 @@ model Workout {
 }
 
 model Exercise {
-  id        String  @id @default(cuid())
-  name      String
-  pr_weight Float
-  pr_volume Float
-  workoutId String
-  sets      Set[]
-  workout   Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  name       String
+  created_at DateTime @default(now())
+  pr_weight  Float
+  pr_volume  Float
+  workoutId  String
+  userId     String?
+  sets       Set[]
+  workout    Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Set {

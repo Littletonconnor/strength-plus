@@ -21,10 +21,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             return null;
           }
 
-          return {
-            user: response.user,
-            token: response.token,
-          };
+          return response.user;
         },
         credentials: {
           username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
@@ -54,19 +51,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return true;
       },
       async session({ session, token }: any) {
-        if (token.user) {
-          session.user = {
-            name: token.user.name,
-            email: token.user.email,
-          };
-          session.accessToken = token.accessToken;
-        }
+        session.user = token.user;
         return session;
       },
       async jwt({ token, user }) {
         if (user) {
-          token.user = { name: user.name, email: user.email };
-          token.accessToken = user.token;
+          token.user = user;
         }
         return token;
       },
