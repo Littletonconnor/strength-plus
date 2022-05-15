@@ -49,6 +49,24 @@ model User {
   sessions      Session[]
 }
 
+model Workout {
+  id         String   @id @default(cuid())
+  created_at DateTime
+}
+
+model Exercise {
+  id        String @id @default(cuid())
+  name      String
+  pr_weight Float
+  pr_volume Float
+}
+
+model Set {
+  id     String @id @default(cuid())
+  amount Float
+  weight Float
+}
+
 model VerificationToken {
   identifier String
   token      String   @unique
