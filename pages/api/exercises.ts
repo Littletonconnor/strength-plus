@@ -13,24 +13,9 @@ export default async function history(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const data = await prisma.user.findUnique({
-      where: {
-        email: 'littletonconnor@gmail.com',
-      },
-      include: {
-        workouts: {
-          include: {
-            exercises: true,
-          },
-        },
-      },
-    });
+    const data = await prisma.exercise.findMany();
 
-    if (!data?.workouts) {
-      return res.status(200).json({ error: false, workouts: [] });
-    }
-
-    return res.status(200).json({ error: false, workouts: data.workouts });
+    return res.status(200).json({ error: false, exercises: data });
   } catch (error) {
     return res.status(500).json({ error: true, message: 'Server error retrieving workouts.' });
   }

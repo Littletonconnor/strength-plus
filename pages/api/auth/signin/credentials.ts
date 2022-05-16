@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { CODES } from 'lib/constants';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from 'prisma/prisma.mjs';
+import { prisma } from 'prisma/prisma';
 
 export default async function signin(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {

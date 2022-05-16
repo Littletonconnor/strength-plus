@@ -1,6 +1,12 @@
-export default function Spinner() {
+import cx from 'classnames';
+
+interface Props {
+  className: string;
+}
+
+export default function Spinner({ className }: Props) {
   return (
-    <svg className="h-6 w-6 animate-spin text-white" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg className={cx('animate-spin', className)} fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path
         className="opacity-75"

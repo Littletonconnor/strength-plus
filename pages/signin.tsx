@@ -85,7 +85,7 @@ export default function SignIn() {
                 type="submit"
                 className="px4 flex w-full justify-center rounded-md bg-primary py-2 text-lg font-semibold text-white"
               >
-                {loading ? <Spinner /> : 'Sign up'}
+                {loading ? <Spinner className="h-6 w-6 text-white" /> : 'Sign up'}
               </button>
             </form>
           </div>

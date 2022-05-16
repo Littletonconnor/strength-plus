@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import http from 'lib/http';
 import Spacer from '../components/Spacer';
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
+import Spinner from '../components/Spinner';
 
 export async function getStaticProps() {
   return { props: {} };
@@ -30,12 +31,16 @@ function HistoryPage() {
     fetchHistory();
   }, [status]);
 
-  if (status === 'loading' || workouts.length === 0) {
-    return <div className="grid min-h-screen place-content-center">Loading...</div>;
-  }
-
   if (status === 'unauthenticated') {
     router.push('/signin');
+  }
+
+  if (status === 'loading' || workouts.length === 0) {
+    return (
+      <div className="grid min-h-screen place-content-center">
+        <Spinner className="h-10 w-10 text-primary" />
+      </div>
+    );
   }
 
   return (

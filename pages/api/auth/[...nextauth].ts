@@ -4,7 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import http from 'lib/http';
-import prisma from 'prisma/prisma.mjs';
+import { prisma } from 'prisma/prisma';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   return NextAuth(req, res, {
