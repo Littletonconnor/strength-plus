@@ -12,6 +12,4 @@ export const prisma =
     log: ['query'],
   });
 
-console.log('@@@@@ HIT', { prisma });
-
 if (process.env.NODE_ENV !== 'production') global.prisma = prisma;

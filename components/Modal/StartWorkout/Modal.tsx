@@ -1,4 +1,5 @@
 import { CheckIcon, DotsHorizontalIcon } from '@heroicons/react/solid';
+import { Popover } from '@headlessui/react';
 import Modal from 'components/Modal';
 import AddExercise from 'components/Modal/AddExercise';
 import { SelectedWorkout, Workout } from 'components/Modal/utils';
@@ -79,7 +80,7 @@ function WorkoutModal({ closeModal }: Props) {
   return (
     <>
       <Modal onClose={closeModal}>
-        <div className="flex flex-col py-3 px-5">
+        <div className="flex flex-col py-3 px-3">
           <div className="flex justify-between">
             <div className="flex items-center space-x-4">
               <button>
@@ -104,15 +105,16 @@ function WorkoutModal({ closeModal }: Props) {
                         <button className="text-lg font-bold text-gray-700">{selectedExercise.name}</button>
                         <button className="ml-auto">
                           <DotsHorizontalIcon className="h-5 w-5 fill-primary" />
+                          <MyPopover />
                         </button>
                       </div>
                       <Spacer size={32 / 2} />
-                      <div className="grid grid-cols-9 items-center justify-items-center gap-2">
+                      <div className="grid grid-cols-8 items-center justify-items-center gap-2">
                         <p className="col-span-1">Set</p>
-                        <p className="col-span-3">Previous</p>
+                        <p className="col-span-2">Previous</p>
                         <p className="col-span-2">lbs</p>
                         <p className="col-span-2">Reps</p>
-                        <button className="col-span-1 py-1 px-2">
+                        <button className="col-span-1 ml-1 py-1 px-2">
                           <CheckIcon className="h-5 w-5 text-primary" />
                         </button>
                       </div>
@@ -120,16 +122,16 @@ function WorkoutModal({ closeModal }: Props) {
                       {selectedExercise.sets.map((set: any, i: number) => {
                         return (
                           <React.Fragment key={i}>
-                            <div className="grid grid-cols-9 items-center gap-2 text-center" key={i}>
+                            <div className="grid grid-cols-8 items-center gap-2 text-center" key={i}>
                               <span className="col-span-1 w-fit rounded-md bg-gray-200 py-1 px-2 text-sm font-bold">
                                 {i + 1}
                               </span>
                               {set.lbs && set.reps ? (
-                                <span className="col-span-3 w-full py-1 text-sm font-semibold text-gray-800">
+                                <span className="col-span-2 w-full py-1 text-sm font-semibold text-gray-800">
                                   {set.lbs + ' x ' + set.reps}
                                 </span>
                               ) : (
-                                <span className="col-span-3 w-full py-1 text-center font-semibold text-gray-800">
+                                <span className="col-span-2 w-full py-1 text-center font-semibold text-gray-800">
                                   <span className="mx-auto block h-[3px] w-1/2 bg-gray-300" />
                                 </span>
                               )}
@@ -143,7 +145,7 @@ function WorkoutModal({ closeModal }: Props) {
                                 type="number"
                                 className="col-span-2 w-full rounded-md bg-gray-200 text-center"
                               />
-                              <button className="col-span-1 w-fit rounded-md bg-gray-200 px-2 py-1">
+                              <button className="col-span-1 py-1 px-2">
                                 <CheckIcon className="h-5 w-5 text-primary" />
                               </button>
                             </div>
@@ -186,6 +188,23 @@ function WorkoutModal({ closeModal }: Props) {
       </Modal>
       <AddExercise closeModal={() => setOpen(false)} open={open} setSelectedExercises={onHandleSetExercises} />
     </>
+  );
+}
+
+function MyPopover() {
+  return (
+    <Popover className="relative">
+      <Popover.Button>Solutions</Popover.Button>
+
+      <Popover.Panel className="absolute z-10">
+        <div className="grid grid-cols-2">
+          <a href="/analytics">Analytics</a>
+          <a href="/engagement">Engagement</a>
+          <a href="/security">Security</a>
+          <a href="/integrations">Integrations</a>
+        </div>
+      </Popover.Panel>
+    </Popover>
   );
 }
 
