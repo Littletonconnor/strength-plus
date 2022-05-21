@@ -63,16 +63,14 @@ model Workout {
 }
 
 model Exercise {
-  id         String          @id @default(cuid())
-  name       String
-  created_at DateTime        @default(now())
-  pr_weight  Float
-  pr_volume  Float
-  workoutId  String
-  userId     String?
-  sets       ExerciseStats[]
-  workout    Workout         @relation(fields: [workoutId], references: [id], onDelete: Cascade)
-  user       User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String          @id @default(cuid())
+  name          String
+  created_at    DateTime        @default(now())
+  workoutId     String
+  userId        String?
+  exerciseStats ExerciseStats[]
+  workout       Workout         @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  user          User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ExerciseStats {

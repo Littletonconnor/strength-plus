@@ -5,7 +5,6 @@ import AddExercise from 'components/Modal/AddExercise';
 import { SelectedWorkout, Workout } from 'components/Modal/utils';
 import Spacer from 'components/Spacer';
 import { Start } from 'components/Svg';
-import { AnimatePresence } from 'framer-motion';
 import useTimer from 'lib/hooks/useTimer';
 import React, { useState } from 'react';
 import http from 'lib/http';
@@ -20,7 +19,7 @@ function genEmptySet(id: number) {
 function maybeAddEmptySets(exercises: any) {
   return exercises.map((exercise: any) => ({
     ...exercise,
-    sets: exercise.sets.length > 0 ? exercise.sets : [genEmptySet(exercise.id)],
+    exerciseStats: exercise.exerciseStats.length > 0 ? exercise.exerciseStats : [genEmptySet(exercise.id)],
   }));
 }
 

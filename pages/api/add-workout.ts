@@ -24,7 +24,6 @@ export default async function history(req: NextApiRequest, res: NextApiResponse)
         },
         include: {
           exercises: {
-            take: 1,
             orderBy: {
               created_at: 'desc',
             },
@@ -37,6 +36,9 @@ export default async function history(req: NextApiRequest, res: NextApiResponse)
               sets: {
                 orderBy: {
                   created_at: 'desc',
+                },
+                include: {
+                  sets: true,
                 },
               },
             },
