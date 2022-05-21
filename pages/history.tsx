@@ -44,8 +44,8 @@ function HistoryPage() {
   }
 
   return (
-    <div style={{ WebkitTapHighlightColor: 'transparent' }}>
-      <header className="fixed bottom-0 w-full border-t border-gray-200 py-3 px-2">
+    <div className="flex flex-col" style={{ WebkitTapHighlightColor: 'transparent' }}>
+      <header className="fixed bottom-0 w-full border-t border-gray-200 bg-white py-3 px-2">
         <nav className="text-center">
           <ul className="grid grid-cols-3 text-xs">
             <li>
@@ -90,7 +90,7 @@ function HistoryPage() {
           </ul>
         </nav>
       </header>
-      <main className="mx-auto max-w-3xl p-3">
+      <main className="mx-auto max-w-3xl overflow-auto p-3">
         <h2 className="text-2xl font-semibold">History</h2>
         <Spacer size={32} />
         <div className="space-y-4">
@@ -132,6 +132,7 @@ function HistoryPage() {
           })}
         </div>
       </main>
+      <div style={{ height: 61 }} />
     </div>
   );
 }

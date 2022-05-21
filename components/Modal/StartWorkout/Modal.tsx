@@ -80,7 +80,7 @@ function WorkoutModal({ closeModal }: Props) {
     setSelectedExercises((exercises: any) => {
       const selectedExerciseId = exercises.findIndex((s: any) => selectedExercise.id === s.id);
       const selectedSetId = exercises[selectedExerciseId].exerciseStats[0].sets.findIndex((s: any) => set.id === s.id);
-      exercises[selectedExerciseId].exerciseStats[0].sets[selectedSetId].new_lps = Number(e.target.value);
+      exercises[selectedExerciseId].exerciseStats[0].sets[selectedSetId].new_lbs = Number(e.target.value);
       return [...exercises];
     });
   };
@@ -99,9 +99,9 @@ function WorkoutModal({ closeModal }: Props) {
       const selectedExerciseId = exercises.findIndex((s: any) => selectedExercise.id === s.id);
       const selectedSetId = exercises[selectedExerciseId].exerciseStats[0].sets.findIndex((s: any) => set.id === s.id);
       const selectedSet = exercises[selectedExerciseId].exerciseStats[0].sets[selectedSetId];
-      const isNewLpsFilledOut = Boolean(selectedSet.new_lps);
+      const isNewLpsFilledOut = Boolean(selectedSet.new_lbs);
       const isNewRepsFilledOut = Boolean(selectedSet.new_reps);
-      selectedSet.new_lps_invalid = !isNewLpsFilledOut;
+      selectedSet.new_lbs_invalid = !isNewLpsFilledOut;
       selectedSet.new_reps_invalid = !isNewRepsFilledOut;
       return [...exercises];
     });
@@ -127,7 +127,7 @@ function WorkoutModal({ closeModal }: Props) {
       !selectedExercises.length ||
       selectedExercises.some((exercise) => {
         return exercise.exerciseStats[0].sets.some((set: any) => {
-          const isLpsInvalid = typeof set.new_lps === 'undefined';
+          const isLpsInvalid = typeof set.new_lbs === 'undefined';
           const isRepsInvalid = typeof set.new_reps === 'undefined';
           return isLpsInvalid && isRepsInvalid;
         });
@@ -140,7 +140,33 @@ function WorkoutModal({ closeModal }: Props) {
     }
   };
 
-  const onFinishComplete = () => {};
+  const onFinishComplete = async () => {
+    const newExercises = selectedExercises.map((exercise) => {
+      return {
+        id: exercise.id,
+        created_at: exercise.created_at,
+        name: exercise.name,
+        exerciseStats: exercise.exerciseStats.map((stat: any) => {
+          return {
+            id: stat.id,
+            created_at: stat.created_at,
+            exerciseId: stat.exerciseId,
+            sets: stat.sets.map((set: any) => {
+              return {
+                id: set.id,
+                created_at: set.created_at,
+                lbs: set.new_lbs,
+                reps: set.new_reps,
+              };
+            }),
+          };
+        }),
+      };
+    });
+    http.post('http://localhost:3000/api/finish-workout', {
+      exercises: newExercises,
+    });
+  };
 
   console.log({ selectedExercises });
 
@@ -191,7 +217,7 @@ function WorkoutModal({ closeModal }: Props) {
                       </div>
                       <Spacer size={32 / 4} />
                       {selectedExercise.exerciseStats[0].sets.map((set: any, i: number) => {
-                        const isLpsValid = typeof set.new_lps_invalid !== 'undefined' && !set.new_lps_invalid;
+                        const isLpsValid = typeof set.new_lbs_invalid !== 'undefined' && !set.new_lbs_invalid;
                         const isRepsValid = typeof set.new_reps_invalid !== 'undefined' && !set.new_reps_invalid;
 
                         return (
@@ -220,8 +246,8 @@ function WorkoutModal({ closeModal }: Props) {
                                   onChange={(e) => onChangeSetLbs(e, selectedExercise, set)}
                                   type="number"
                                   className={cx('col-span-2 w-full rounded-md text-center font-semibold', {
-                                    'bg-red-200': set.new_lps_invalid,
-                                    'bg-gray-200': !set.new_lps_invalid,
+                                    'bg-red-200': set.new_lbs_invalid,
+                                    'bg-gray-200': !set.new_lbs_invalid,
                                   })}
                                 />
                                 <input
