@@ -1,93 +1,8 @@
-import { Combobox, Dialog, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { Dialog, Transition } from '@headlessui/react';
 import React, { useEffect, useState } from 'react';
 import http from 'lib/http';
 import cx from 'classnames';
 import Spinner from 'components/Spinner';
-
-// const exercises = [
-//   {
-//     id: '1',
-//     name: 'Bench Press',
-//     created_at: '2022-05-15T21:09:53.841Z',
-//     pr_weight: 225,
-//     pr_volume: 5,
-//     workoutId: '1',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-//   {
-//     id: '2',
-//     name: 'Pec Deck',
-//     created_at: '2022-05-15T21:09:53.841Z',
-//     pr_weight: 160,
-//     pr_volume: 3,
-//     workoutId: '1',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-//   {
-//     id: '3',
-//     name: 'High incline machine press',
-//     created_at: '2022-05-15T21:09:53.841Z',
-//     pr_weight: 160,
-//     pr_volume: 2,
-//     workoutId: '1',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-//   {
-//     id: '4',
-//     name: 'Machine side lateral',
-//     created_at: '2022-05-15T21:09:53.841Z',
-//     pr_weight: 70,
-//     pr_volume: 2,
-//     workoutId: '1',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-//   {
-//     id: '5',
-//     name: 'DB skullcrushers',
-//     created_at: '2022-05-15T21:09:53.841Z',
-//     pr_weight: 30,
-//     pr_volume: 2,
-//     workoutId: '1',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-//   {
-//     id: '6',
-//     name: 'Dips',
-//     created_at: '2022-05-15T21:09:53.841Z',
-//     pr_weight: 1,
-//     pr_volume: 2,
-//     workoutId: '1',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-//   {
-//     id: '7',
-//     name: 'Leg raises',
-//     created_at: '2022-05-15T21:09:53.841Z',
-//     pr_weight: 1,
-//     pr_volume: 2,
-//     workoutId: '1',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-//   {
-//     id: '8',
-//     name: 'Standing calf raises',
-//     created_at: '2022-05-15T21:09:53.841Z',
-//     pr_weight: 185,
-//     pr_volume: 2,
-//     workoutId: '1',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-//   {
-//     id: '9',
-//     name: 'Bench Press',
-//     created_at: '2022-05-15T22:09:53.841Z',
-//     pr_weight: 0,
-//     pr_volume: 0,
-//     workoutId: '2',
-//     userId: 'cl2v83qx400007vm0k6yvuaoy',
-//   },
-// ];
 
 export type Workout = { id: number; name: string };
 
@@ -142,10 +57,6 @@ function AddExercises({ open, closeModal, setSelectedExercises }: Props) {
     }
     fetchExercises();
   }, []);
-
-  console.log({ exercises });
-  console.log({ selected });
-  console.log({ query });
 
   const filteredWorkouts =
     query === ''

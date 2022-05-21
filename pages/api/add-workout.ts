@@ -33,7 +33,8 @@ export default async function history(req: NextApiRequest, res: NextApiResponse)
               },
             },
             include: {
-              sets: {
+              exerciseStats: {
+                take: 1,
                 orderBy: {
                   created_at: 'desc',
                 },
