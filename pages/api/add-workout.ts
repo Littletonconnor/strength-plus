@@ -34,7 +34,12 @@ export default async function history(req: NextApiRequest, res: NextApiResponse)
               },
             },
             include: {
-              sets: true,
+              sets: {
+                take: 1,
+                orderBy: {
+                  created_at: 'desc',
+                },
+              },
             },
           },
         },

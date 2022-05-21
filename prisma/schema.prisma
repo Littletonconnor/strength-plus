@@ -78,6 +78,7 @@ model Exercise {
 model Set {
   id         String   @id @default(cuid())
   created_at DateTime @default(now())
+  amount     Int      @default(1)
   lbs        Float    @default(0)
   reps       Float    @default(0)
   exerciseId String
