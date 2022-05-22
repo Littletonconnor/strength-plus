@@ -50,23 +50,26 @@ model User {
   accounts Account[]
   sessions Session[]
   Workout  Workout[]
+  stats    Stats[]
 }
 
 model Exercise {
-  id            String   @id @default(cuid())
-  name          String
-  created_at    DateTime @default(now())
-  workoutId     String
-  exerciseStats Stats[]
-  workout       Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  name       String
+  created_at DateTime @default(now())
+  workoutId  String
+  stats      Stats[]
+  workout    Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
 }
 
 model Stats {
   id         String   @id @default(cuid())
   created_at DateTime @default(now())
   exerciseId String
+  userId     String
   sets       Sets[]
   exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Workout {
