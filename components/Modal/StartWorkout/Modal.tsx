@@ -140,35 +140,13 @@ function WorkoutModal({ closeModal }: Props) {
     }
   };
 
-  const onFinishComplete = async () => {
-    const newExercises = selectedExercises.map((exercise) => {
-      return {
-        id: exercise.id,
-        created_at: exercise.created_at,
-        name: exercise.name,
-        exerciseStats: exercise.exerciseStats.map((stat: any) => {
-          return {
-            id: stat.id,
-            created_at: stat.created_at,
-            exerciseId: stat.exerciseId,
-            sets: stat.sets.map((set: any) => {
-              return {
-                id: set.id,
-                created_at: set.created_at,
-                lbs: set.new_lbs,
-                reps: set.new_reps,
-              };
-            }),
-          };
-        }),
-      };
-    });
-    http.post('http://localhost:3000/api/finish-workout', {
-      exercises: newExercises,
-    });
+  const onFinishComplete = (override = false) => {
+    if (override) {
+      setSelectedExercises([]);
+      closeModal();
+    }
+    setOpenFinishModal(false);
   };
-
-  console.log({ selectedExercises });
 
   return (
     <>
@@ -313,11 +291,7 @@ function WorkoutModal({ closeModal }: Props) {
         onCancelComplete={onHandleClose}
         onClose={() => setOpenCancelModal(false)}
       />
-      <FinishWorkout
-        open={openFinishModal}
-        onFinishComplete={onFinishComplete}
-        onClose={() => setOpenFinishModal(false)}
-      />
+      <FinishWorkout open={openFinishModal} selectedExercises={selectedExercises} onClose={onFinishComplete} />
     </>
   );
 }

@@ -19,6 +19,9 @@ export default async function history(req: NextApiRequest, res: NextApiResponse)
       },
       include: {
         workouts: {
+          orderBy: {
+            created_at: 'desc',
+          },
           include: {
             exercises: true,
           },

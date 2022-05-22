@@ -47,33 +47,21 @@ model User {
   emailVerified DateTime?
   image         String?
 
-  accounts  Account[]
-  sessions  Session[]
-  workouts  Workout[]
-  exercises Exercise[]
-}
-
-model Workout {
-  id         String     @id @default(cuid())
-  name       String     @default("")
-  userId     String
-  created_at DateTime   @default(now())
-  exercises  Exercise[]
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accounts Account[]
+  sessions Session[]
+  Workout  Workout[]
 }
 
 model Exercise {
-  id            String          @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String
-  created_at    DateTime        @default(now())
+  created_at    DateTime @default(now())
   workoutId     String
-  userId        String?
-  exerciseStats ExerciseStats[]
-  workout       Workout         @relation(fields: [workoutId], references: [id], onDelete: Cascade)
-  user          User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exerciseStats Stats[]
+  workout       Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
 }
 
-model ExerciseStats {
+model Stats {
   id         String   @id @default(cuid())
   created_at DateTime @default(now())
   exerciseId String
@@ -81,13 +69,22 @@ model ExerciseStats {
   exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 }
 
+model Workout {
+  id         String     @id @default(cuid())
+  name       String     @default("")
+  created_at DateTime   @default(now())
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise   Exercise[]
+}
+
 model Sets {
-  id            String        @id @default(cuid())
-  created_at    DateTime      @default(now())
-  lbs           Float         @default(0)
-  reps          Float         @default(0)
-  setId         String
-  exerciseStats ExerciseStats @relation(fields: [setId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  lbs        Float    @default(0)
+  reps       Float    @default(0)
+  statId     String
+  stats      Stats    @relation(fields: [statId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {

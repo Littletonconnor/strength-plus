@@ -104,7 +104,7 @@ function HistoryPage() {
                   </button>
                 </div>
                 <p className="text-sm font-medium text-gray-700">
-                  {format(new Date(workouts[0].created_at), 'MMMM dd, yyyy')}
+                  {format(new Date(workout.created_at), 'MMMM dd, yyyy')}
                 </p>
                 <table
                   style={{ borderSpacing: '2px 0', borderCollapse: 'separate' }}
@@ -132,7 +132,7 @@ function HistoryPage() {
           })}
         </div>
       </main>
-      <div style={{ height: 61 }} />
+      <div style={{ height: 80 }} />
     </div>
   );
 }

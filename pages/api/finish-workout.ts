@@ -20,6 +20,7 @@ export default async function finishWorkout(req: NextApiRequest, res: NextApiRes
         user: {
           connect: { email: session.user.email },
         },
+        name: 'Quick Add Workout',
       },
     });
 
@@ -51,8 +52,8 @@ export default async function finishWorkout(req: NextApiRequest, res: NextApiRes
                 id: newExerciseStats.id,
               },
             },
-            lbs: set.lbs,
-            reps: set.reps,
+            lbs: set.new_lbs,
+            reps: set.new_reps,
           },
         });
       }
