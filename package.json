@@ -1,5 +1,5 @@
 {
-  "name": "strength-plus-4771",
+  "name": "@cwl/strength-plus",
   "private": true,
   "sideEffects": false,
   "scripts": {

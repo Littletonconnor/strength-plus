@@ -1,4 +1,4 @@
-app = "strength-plus-4771"
+app = "strength-plus"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]
