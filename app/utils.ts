@@ -1,5 +1,7 @@
 import { useMatches } from "@remix-run/react";
+import { clsx, type ClassValue } from "clsx";
 import { useMemo } from "react";
+import { twMerge } from "tailwind-merge";
 
 import type { User } from "~/models/user.server";
 
@@ -73,4 +75,8 @@ export function useUser(): User {
 
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
