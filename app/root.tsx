@@ -20,6 +20,13 @@ import { Link } from "~/components/link/link";
 import { getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./components/dropdown_menu/dropdown_menu";
+
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -53,12 +60,21 @@ export default function App() {
                   <Link to="/log-book">Log book</Link>
                 </li>
                 <li>
-                  <Link to="/profile">
-                    <Avatar className="h-7 w-7">
-                      <AvatarImage src="/avatar.svg" alt="User profile" />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </Link>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Avatar className="h-7 w-7">
+                        <AvatarImage src="/avatar.svg" alt="User profile" />
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem>
+                        <Link to="/profile">Profile</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link to="/schedule">Schedule</Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </li>
               </ul>
             </nav>

@@ -9,14 +9,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/popover/popover";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/select/select";
 import { H1, Muted, P } from "~/components/typography/typography";
 import { useOptionalUser } from "~/utils";
 

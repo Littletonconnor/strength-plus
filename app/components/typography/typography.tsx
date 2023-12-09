@@ -41,11 +41,22 @@ function Large({ children }: TypographyProps) {
   return <div className="text-lg font-semibold">{children}</div>;
 }
 
+function Strong({ children }: TypographyProps) {
+  return <div className="text-base font-semibold">{children}</div>;
+}
+
 function Small({ children }: TypographyProps) {
   return <small className="text-sm font-medium leading-none">{children}</small>;
 }
+
 export function Muted({ children }: TypographyProps) {
   return <p className="text-sm text-muted-foreground">{children}</p>;
 }
 
-export { H1, H2, H3, H4, P, Large, Small };
+export function Error({ children }: TypographyProps) {
+  return (
+    <p className="text-[0.8rem] font-medium text-destructive">{children}</p>
+  );
+}
+
+export { H1, H2, H3, H4, P, Large, Small, Strong };
