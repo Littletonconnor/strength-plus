@@ -1,149 +1,80 @@
-import { WorkoutSchedule } from "@prisma/client";
 import {
   json,
+  redirect,
   type LoaderFunctionArgs,
   type MetaFunction,
+  DataFunctionArgs,
 } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/card/card";
+import { Link } from "~/components/link/link";
 
-import { Button } from "~/components/button/button";
-import { Input } from "~/components/input/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/select/select";
-import { H1, H3, P, Strong } from "~/components/typography/typography";
-import {
-  createWorkoutSchedule,
-  getWorkoutScheduleById,
-} from "~/models/schedule.server";
+import { H1, H2, Muted, P, Small } from "~/components/typography/typography";
+import { getWorkoutScheduleById } from "~/models/schedule.server";
 import { getUserId } from "~/session.server";
 import { capitalize } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Profile" }];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserId(request);
 
   if (!userId) {
-    return { status: 401, redirect: "/login" };
+    throw new Response("User is not authorized to hit this route", {
+      status: 401,
+    });
   }
 
   const workoutSchedule = await getWorkoutScheduleById(userId);
 
-  return json({ data: workoutSchedule });
-};
-
-export const action = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await getUserId(request);
-  const formData = await request.formData();
-  const day = formData.get("day");
-  const title = formData.get("title");
-  // TODO: add intent
-
-  if (!userId) {
-    return { status: 401, redirect: "/login" };
-  } else if (!day) {
-    // return json({ errors: [{ message: "Day is required." }] }, { status: 400 });
-    // } else if (!title) {
-    //   return json(
-    //     {
-    //       errors: [
-    //         {
-    //           message: "We would like to retrieve the title for this component.",
-    //         },
-    //       ],
-    //     },
-    //     { status: 400 },
-    //   );
+  if (!workoutSchedule.length) {
+    return redirect("/schedule/new");
   }
 
-  const workoutSchedule = (await getWorkoutScheduleById(userId)) as any;
-
-  for (const workout of workoutSchedule) {
-    if (day === workout.day) {
-      return json(
-        { errors: [{ message: "This day already exists in your schedule." }] },
-        { status: 400 },
-      );
-    }
-  }
-
-  const updatedWorkoutSchedule = createWorkoutSchedule(userId, workoutSchedule);
-
-  return json({ data: updatedWorkoutSchedule });
-};
+  return json({ workoutSchedule });
+}
 
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
-
-  console.log(actionData);
+  const { workoutSchedule } = useLoaderData<typeof loader>();
 
   return (
     <main className="mx-auto p-8 pt-6 relative min-h-screen bg-white">
       <div className="max-w-6xl px-4 mx-auto">
-        <div className="space-y-6">
-          <H1>Workout Schedule</H1>
-          <Form method="post" className="space-y-2">
-            <Select name="day">
-              <SelectTrigger className="w-[225px]">
-                <SelectValue placeholder="Add workout to your schedule" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="monday">Monday</SelectItem>
-                <SelectItem value="tuesday">Tuesday</SelectItem>
-                <SelectItem value="wednesday">Wednesday</SelectItem>
-                <SelectItem value="thursday">Thursday</SelectItem>
-                <SelectItem value="friday">Friday</SelectItem>
-                <SelectItem value="saturday">Saturday</SelectItem>
-                <SelectItem value="sunday">Sunday</SelectItem>
-              </SelectContent>
-            </Select>
-            {/* @ts-expect-error I dont really know */}
-            {actionData?.errors?.[0].message ? (
-              <p className="text-[0.8rem] font-medium text-destructive">
-                {/* @ts-expect-error I dont really know */}
-                {actionData.errors[0].message}
-              </p>
-            ) : null}
-            <Button type="submit">Add Day</Button>
-          </Form>
-          <div className="pt-12 grid grid-cols-3">
-            {data.map((workout: WorkoutSchedule) => {
-              return (
-                <div
-                  className="space-y-1 rounded-xl border p-4 font-mono text-sm shadow-sm"
-                  key={workout.id}
-                >
-                  <H3>{capitalize(workout.day)}</H3>
-                  <P>Today is the day. Let us workout hard!</P>
-                  <Form method="post" className="w-[320px] space-y-5">
-                    <fieldset>
-                      <Strong>Day</Strong>
-                      <Input id="day" name="day" placeholder={workout.day} />
-                    </fieldset>
-                    <fieldset>
-                      <Strong>Title</Strong>
-                      <Input
-                        id="title"
-                        name="title"
-                        placeholder={workout.title}
-                      />
-                    </fieldset>
-                    <div className="flex w-full justify-between gap-2">
-                      <Button type="reset" variant="destructive">
-                        Remove
-                      </Button>
-                      <Button type="submit">Update</Button>
-                    </div>
-                  </Form>
-                </div>
-              );
-            })}
+        <div className="space-y-12">
+          <H1>Schedule</H1>
+          <div className="grid grid-cols-[400px,1fr] gap-12">
+            <section className="space-y-4">
+              <H2>Weekly</H2>
+              {workoutSchedule.map((workout) => {
+                return (
+                  <Card className="relative" key={workout.id}>
+                    <Link
+                      className="absolute right-0 top-3"
+                      to={`/schedule/${workout.id}/edit`}
+                    >
+                      <Muted>Edit</Muted>
+                    </Link>
+                    <CardHeader>
+                      <CardTitle>{workout.title}</CardTitle>
+                      <CardDescription>
+                        {capitalize(workout.day)}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>{workout.description}</CardContent>
+                  </Card>
+                );
+              })}
+            </section>
+            <section className="space-y-4">
+              <H2>Monthly</H2>
+              <P>Calendar goes here</P>
+            </section>
           </div>
         </div>
       </div>
