@@ -6,11 +6,11 @@ type LinkProps = Pick<
   React.ComponentProps<typeof RemixLink>,
   "to" | "children"
 > &
-  Omit<ButtonProps, "variant" | "asChild">;
+  ButtonProps;
 
-export function Link({ to, children, ...props }: LinkProps) {
+export function Link({ to, children, variant = "link", ...props }: LinkProps) {
   return (
-    <Button asChild variant="link" {...props}>
+    <Button asChild variant={variant} {...props}>
       <RemixLink to={to}>{children}</RemixLink>
     </Button>
   );

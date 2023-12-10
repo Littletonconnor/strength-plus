@@ -3,9 +3,9 @@ import {
   redirect,
   type LoaderFunctionArgs,
   type MetaFunction,
-  DataFunctionArgs,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+
 import {
   Card,
   CardContent,
@@ -14,13 +14,15 @@ import {
   CardTitle,
 } from "~/components/card/card";
 import { Link } from "~/components/link/link";
-
-import { H1, H2, Muted, P, Small } from "~/components/typography/typography";
-import { getWorkoutScheduleById } from "~/models/schedule.server";
+import { H1, H2, Muted, P } from "~/components/typography/typography";
+import {
+  getScheduleById,
+  getWorkoutsByScheduleId,
+} from "~/models/schedule.server";
 import { getUserId } from "~/session.server";
 import { capitalize } from "~/utils";
 
-export const meta: MetaFunction = () => [{ title: "Profile" }];
+export const meta: MetaFunction = () => [{ title: "S+ | Schedule" }];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserId(request);
@@ -31,32 +33,39 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  const workoutSchedule = await getWorkoutScheduleById(userId);
+  const schedule = await getScheduleById(userId);
 
-  if (!workoutSchedule.length) {
+  if (!schedule) {
     return redirect("/schedule/new");
   }
 
-  return json({ workoutSchedule });
+  const workouts = await getWorkoutsByScheduleId(schedule.id);
+
+  return json({ schedule, workouts });
 }
 
 export default function Index() {
-  const { workoutSchedule } = useLoaderData<typeof loader>();
+  const { schedule, workouts } = useLoaderData<typeof loader>();
 
   return (
     <main className="mx-auto p-8 pt-6 relative min-h-screen bg-white">
       <div className="max-w-6xl px-4 mx-auto">
         <div className="space-y-12">
-          <H1>Schedule</H1>
-          <div className="grid grid-cols-[400px,1fr] gap-12">
+          <div className="space-y-2">
+            <H1>{schedule.title}</H1>
+            <Link variant="outline" to="/schedule/edit">
+              Edit Schedule
+            </Link>
+          </div>
+          <div className="grid grid-cols-[320px,1fr] gap-12">
             <section className="space-y-4">
               <H2>Weekly</H2>
-              {workoutSchedule.map((workout) => {
+              {workouts.map((workout) => {
                 return (
                   <Card className="relative" key={workout.id}>
                     <Link
                       className="absolute right-0 top-3"
-                      to={`/schedule/${workout.id}/edit`}
+                      to={`/workout/${workout.id}/edit`}
                     >
                       <Muted>Edit</Muted>
                     </Link>

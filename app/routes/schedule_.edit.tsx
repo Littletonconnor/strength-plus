@@ -33,7 +33,7 @@ import {
 import { Textarea } from "~/components/textarea/textarea";
 import { H1, Muted } from "~/components/typography/typography";
 import { exercises } from "~/constants";
-import { getWorkoutScheduleById } from "~/models/schedule.server";
+import { getScheduleById } from "~/models/schedule.server";
 import { getUserId } from "~/session.server";
 import { cn } from "~/utils";
 
@@ -48,7 +48,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     });
   }
 
-  const workoutSchedule = await getWorkoutScheduleById(userId);
+  const workoutSchedule = await getScheduleById(userId);
 
   return json({ data: workoutSchedule });
 };

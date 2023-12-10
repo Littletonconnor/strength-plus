@@ -15,8 +15,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   password Password?
-  workoutSchedule WorkoutSchedule[]
-  notes    Note[]
+  workoutSchedule Schedule?
 }
 
 model Password {
@@ -26,19 +25,22 @@ model Password {
   userId String @unique
 }
 
-model Note {
+
+model Schedule {
   id    String @id @default(cuid())
   title String
-  body  String
+  description  String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
+  userId String @unique
+
+  workouts Workout[]
 }
 
-model WorkoutSchedule {
+model Workout {
   id    String @id @default(cuid())
   title String
   description  String
@@ -47,6 +49,34 @@ model WorkoutSchedule {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
+  schedule   Schedule   @relation(fields: [scheduleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  scheduleId String
+
+  exercises Exercise[]
+}
+
+model Exercise {
+  id    String @id @default(cuid())
+  title String
+  note  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workout   Workout   @relation(fields: [workoutId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  workoutId String
+
+  sets Set[]
+}
+
+model Set {
+  id    String @id @default(cuid())
+  reps  Int
+  weight Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  exercise   Exercise   @relation(fields: [exerciseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  exerciseId String
 }
