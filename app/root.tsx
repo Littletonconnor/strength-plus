@@ -11,11 +11,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "~/components/avatar/avatar";
+import { Avatar, AvatarImage } from "~/components/avatar/avatar";
 import { Link } from "~/components/link/link";
 import { getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
@@ -54,7 +50,7 @@ export default function App() {
             <nav>
               <ul className="flex items-center">
                 <li>
-                  <Link to="/workouts">Workouts</Link>
+                  <Link to="/workout">Workout</Link>
                 </li>
                 <li>
                   <Link to="/log-book">Log book</Link>

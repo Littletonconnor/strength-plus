@@ -24,14 +24,6 @@ async function seed() {
     },
   });
 
-  const schedule = await prisma.schedule.create({
-    data: {
-      title: "Push Pull Legs",
-      description: "A bro split",
-      userId: user.id,
-    },
-  });
-
   async function createSet(id: Exercise["id"]) {
     await prisma.set.create({
       data: {
@@ -42,162 +34,78 @@ async function seed() {
     });
   }
 
-  const pushA = await prisma.workout.create({
+  const globalTemplate = await prisma.template.create({
     data: {
-      title: "Push",
-      description: "Chest, Shoulders, Triceps",
-      day: "monday",
-      scheduleId: schedule.id,
+      category: "Push, Pull, Legs",
+      description:
+        "A beginner friendly push workout that focuses on chest, shoulders, and triceps.",
+      name: "Push A",
     },
   });
 
-  const ex1 = await prisma.exercise.create({
+  const template = await prisma.template.create({
+    data: {
+      category: "Push, Pull, Legs",
+      description:
+        "A beginner friendly push workout that focuses on chest, shoulders, and triceps.",
+      name: "Push B",
+      userId: user.id,
+    },
+  });
+
+  const workout = await prisma.workout.create({
+    data: {
+      title: "Push",
+      description:
+        "An intermediate push workout that focuses on incline bench press.",
+      userId: user.id,
+    },
+  });
+
+  const workoutEx1 = await prisma.exercise.create({
     data: {
       title: "bench-press",
       note: "This was a tough one",
-      workoutId: pushA.id,
+      workoutId: workout.id,
     },
   });
 
-  const ex2 = await prisma.exercise.create({
+  const workoutEx2 = await prisma.exercise.create({
     data: {
       title: "db-shoulder-press",
-      workoutId: pushA.id,
+      workoutId: workout.id,
     },
   });
 
-  await createSet(ex1.id);
-  await createSet(ex2.id);
-
-  const pullA = await prisma.workout.create({
+  const templateEx1 = await prisma.exercise.create({
     data: {
-      title: "Pull",
-      description: "Back and Biceps",
-      day: "tuesday",
-      scheduleId: schedule.id,
+      title: "bench-press",
+      note: "This was a tough one",
+      templateId: template.id,
     },
   });
 
-  const ex3 = await prisma.exercise.create({
+  const templateEx2 = await prisma.exercise.create({
     data: {
-      title: "pull-ups",
-      workoutId: pullA.id,
+      title: "db-shoulder-press",
+      templateId: template.id,
     },
   });
 
-  const ex4 = await prisma.exercise.create({
-    data: {
-      title: "hammer-curls",
-      workoutId: pullA.id,
-    },
-  });
-
-  await createSet(ex3.id);
-  await createSet(ex4.id);
-
-  const legsA = await prisma.workout.create({
-    data: {
-      title: "Legs",
-      description: "Legs",
-      day: "wednesday",
-      scheduleId: schedule.id,
-    },
-  });
-
-  const ex5 = await prisma.exercise.create({
+  const globalTemplateEx1 = await prisma.exercise.create({
     data: {
       title: "squats",
-      workoutId: legsA.id,
+      templateId: globalTemplate.id,
     },
   });
 
-  const ex6 = await prisma.exercise.create({
-    data: {
-      title: "calf-raises",
-      workoutId: legsA.id,
-    },
-  });
+  await createSet(workoutEx1.id);
+  await createSet(workoutEx2.id);
 
-  await createSet(ex5.id);
-  await createSet(ex6.id);
+  await createSet(templateEx1.id);
+  await createSet(templateEx2.id);
 
-  const pushB = await prisma.workout.create({
-    data: {
-      title: "Push",
-      description: "Chest, Shoulders, Triceps",
-      day: "friday",
-      scheduleId: schedule.id,
-    },
-  });
-
-  const ex7 = await prisma.exercise.create({
-    data: {
-      title: "db-bench-press",
-      workoutId: pushB.id,
-    },
-  });
-
-  const ex8 = await prisma.exercise.create({
-    data: {
-      title: "tricep-dips",
-      workoutId: pushB.id,
-    },
-  });
-
-  await createSet(ex7.id);
-  await createSet(ex8.id);
-
-  const pullB = await prisma.workout.create({
-    data: {
-      title: "Pull",
-      description: "Back and Biceps",
-      day: "saturday",
-      scheduleId: schedule.id,
-    },
-  });
-
-  const ex9 = await prisma.exercise.create({
-    data: {
-      title: "lat-pull-machine",
-      workoutId: pullB.id,
-    },
-  });
-
-  const ex10 = await prisma.exercise.create({
-    data: {
-      title: "bicep-curls",
-      workoutId: pullB.id,
-    },
-  });
-
-  await createSet(ex9.id);
-  await createSet(ex10.id);
-
-  const legsB = await prisma.workout.create({
-    data: {
-      title: "Legs",
-      description: "Legs",
-      day: "sunday",
-      scheduleId: schedule.id,
-    },
-  });
-
-  const ex11 = await prisma.exercise.create({
-    data: {
-      title: "front-squats",
-      workoutId: legsB.id,
-    },
-  });
-
-  const ex12 = await prisma.exercise.create({
-    data: {
-      title: "leg-extensions",
-      workoutId: legsB.id,
-    },
-  });
-
-  await createSet(ex11.id);
-  await createSet(ex12.id);
+  await createSet(globalTemplateEx1.id);
 
   console.log(`Database has been seeded. 🌱`);
 }
