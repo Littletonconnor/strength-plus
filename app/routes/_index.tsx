@@ -10,8 +10,10 @@ export default function Index() {
   if (!user) console.log("no user");
 
   return (
-    <main className="p-8 pt-6 relative min-h-screen bg-white">
-      <div className="max-w-6xl px-4 mx-auto">Index route</div>
+    <main>
+      <div className="px-4 sm:px-6 mx-auto">
+        <div>Workouts</div>
+      </div>
     </main>
   );
 }
